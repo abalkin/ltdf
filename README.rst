@@ -7,8 +7,8 @@ local clocks are moved back.  In those times intervals are introduced
 in which local clocks show the same time twice in the same day.   In
 these situations, the information displayed on a local clock (or
 stored in a Python datetime instance) is insufficient to identify a
-particular instance in time.   The proposed solution is to add a
-boolean flag to the datetime instances that will distinguish between
+particular moment in time.   The proposed solution is to add a
+boolean flag to the ``datetime`` instances that will distinguish between
 the two ambiguous times.
 
 =======
@@ -29,13 +29,13 @@ Affected APIs
 Attributes
 ...............
 
-Instances of datetime.time and datetime.datetime will get a new
+Instances of ``datetime.time`` and ``datetime.datetime`` will get a new
 boolean attribute called "first."
 
 Constructors
 ....................
 
-The ``__new__`` methods of the datetime.time and datetime.datetime classes
+The ``__new__`` methods of the ``datetime.time`` and ``datetime.datetime`` classes
 will get a new keyword-only argument ``first=True`` that will control the
 value of the "first" attribute in the returned instance.
 
@@ -61,8 +61,8 @@ these methods is proposed.
 
 Pickle size
 --------------
-Pickle sizes for the datetime.datetime and datetime.time objects will
-not change.  The ``first`` flag will be encoded in the first bit of the 4th byte of the datetime.datetime
+Pickle sizes for the ``datetime.datetime`` and ``datetime.time`` objects will
+not change.  The ``first`` flag will be encoded in the first bit of the 4th byte of the ``datetime.datetime``
 pickle payload or the 1st byte of the datetime.time. In the current
 implementation [1] these bytes are used to store hour value (0-23) and
 the first bit is always 0.  Note that ``first=True`` will be encoded as 0
