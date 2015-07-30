@@ -44,7 +44,7 @@ Methods
 
 The ``replace()`` methods  of the ``datetime.time`` and
 ``datetime.datetime`` classes will get a new keyword-only argument
-first=True that will control the value of the ``first`` attribute in the
+``first=True`` that will control the value of the ``first`` attribute in the
 returned instance.
 
 Affected behaviors
