@@ -110,4 +110,8 @@ Questions and Answers
 * Bob:  I did not think about it, but let's pick the first.
 
 
+2. Why "first"?
+
+Because "second" is already there.  (*TODO: add a non-humorous rationale.*)
+
 [1]: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
