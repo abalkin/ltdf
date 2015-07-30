@@ -63,12 +63,15 @@ Pickle size
 --------------
 Pickle sizes for the ``datetime.datetime`` and ``datetime.time`` objects will
 not change.  The ``first`` flag will be encoded in the first bit of the 4th byte of the ``datetime.datetime``
-pickle payload or the 1st byte of the datetime.time. In the current
-implementation [1] these bytes are used to store hour value (0-23) and
+pickle payload or the 1st byte of the datetime.time. In the `current
+implementation`_ these bytes are used to store hour value (0-23) and
 the first bit is always 0.  Note that ``first=True`` will be encoded as 0
 in the first bit and ``first=False`` as 1.  (This change only affects
 pickle format.  In C implementation, the "first" member will get a
 full byte to store the actual boolean value.)
+
+.. _current implementation: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
+
 
 Temporal arithmetics
 ----------------------------
@@ -113,5 +116,3 @@ Questions and Answers
 2. Why "first"?
 
 Because "second" is already there.  (*TODO: add a non-humorous rationale.*)
-
-[1]: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
