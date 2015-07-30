@@ -97,16 +97,17 @@ Questions and Answers
 
 1. Why not call the new flag "isdst"?
 
-Alice:  Bob - let's have a stargazing party at 01:30 AM tomorrow!
-Bob:  Should I presume initially that summer time (for example,
-Daylight Saving Time) is or is not (respectively) in effect for the
-specified time?
-Allice: Huh?
+-------
 
-Bob: Alice - let's have a stargazing party at 01:30 AM tomorrow!
-Alice: You know, Bob, 01:30 AM will happen twice tomorrow. Which one
-do you have in mind?
-Bob:  I did not think about it, but let's pick the first.
+* Alice:  Bob - let's have a stargazing party at 01:30 AM tomorrow!
+* Bob:  Should I presume initially that summer time (for example, Daylight Saving Time) is or is not (respectively) in effect for the specified time?
+* Alice: Huh?
+
+-------
+
+* Bob: Alice - let's have a stargazing party at 01:30 AM tomorrow!
+* Alice: You know, Bob, 01:30 AM will happen twice tomorrow. Which one do you have in mind?
+* Bob:  I did not think about it, but let's pick the first.
 
 
 [1]: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
