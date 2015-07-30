@@ -36,16 +36,12 @@ Constructors
 ....................
 
 The ``__new__`` methods of the ``datetime.time`` and ``datetime.datetime`` classes
-will get a new keyword-only argument ``first=True`` that will control the
-value of the "first" attribute in the returned instance.
+will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the `first`` argument will be used to initialize the value of the ``first`` attribute in the returned instance.
 
 Methods
 .............
 
-The ``replace()`` methods  of the ``datetime.time`` and
-``datetime.datetime`` classes will get a new keyword-only argument
-``first=True`` that will control the value of the ``first`` attribute in the
-returned instance.
+The ``replace()`` methods  of the ``datetime.time`` and ``datetime.datetime`` classes will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the `first`` argument will be used to set the value of the ``first`` attribute in the returned instance.
 
 Affected behaviors
 -------------------------
