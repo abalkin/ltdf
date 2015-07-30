@@ -106,7 +106,7 @@ Questions and Answers
 -------
 
 * Bob: Alice - let's have a stargazing party at 01:30 AM tomorrow!
-* Alice: You know, Bob, 01:30 AM will happen twice tomorrow. Which one do you have in mind?
+* Alice: You know, Bob, 01:30 AM will happen twice tomorrow. Which time do you have in mind?
 * Bob:  I did not think about it, but let's pick the first.
 
 
