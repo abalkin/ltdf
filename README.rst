@@ -76,7 +76,7 @@ The value of "first" will be ignored in all operations except
 utcoffset() and dst() methods of tzinfo implementations and __eq__ and
 ``__hash__`` methods of the datetime.datetime and datetime.time  classes.
 The only methods that will be able to  produce nonzero values of
-"first" are ``__new__`` and replace() methods of the ``datetime.datetime`` and
+"first" are ``__new__`` and ``replace()`` methods of the ``datetime.datetime`` and
 ``datetime.time``  classes and ``fromutc()`` method of some tzinfo
 implementations.
 
@@ -88,7 +88,7 @@ This proposal will have no effect on the programs that do not set the
 Pickles produced by older programs will remain fully forward
 compatible.  Only datetime/time instances with ``first=False`` pickled in
 the new versions will become unreadable by the older Python versions.
-Pickles of instances with first=False will remain unchanged.
+Pickles of instances with ``first=True`` (which is the default) will remain unchanged.
 
 
 ==================
