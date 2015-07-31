@@ -122,5 +122,9 @@ Questions and Answers
 
 
 2. Why "first"?
-
-Because "second" is already there.  (*TODO: add a non-humorous rationale.*)
+  * Because "second" is already there.
+  * Because "later" is confusable with "latter".
+  * Because "earlier" has the same issue as "first" (requires default to be True) but is two characters longer.
+  * Remaining possibilities:
+    * "is_first"
+    " "ltdf" (Local Time Disambiguation Flag) - short and no-one will attempt to guess what it means without reading the docs.
