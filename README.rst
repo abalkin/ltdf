@@ -23,7 +23,7 @@ The "first" flag
 ------------------
 
 We propose adding a boolean member called ``first`` to the instances of
-``datetime.time`` and ``datetime.datetime`` classes.   This member will have the
+``datetime.time`` and ``datetime.datetime`` classes.   This member should have the
 value True for all instances except those that represent the second
 (chronologically) moment in time in an ambiguous case.
 
