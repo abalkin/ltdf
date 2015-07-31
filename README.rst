@@ -40,12 +40,12 @@ Constructors
 ....................
 
 The ``__new__`` methods of the ``datetime.time`` and ``datetime.datetime`` classes
-will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the `first`` argument will be used to initialize the value of the ``first`` attribute in the returned instance.
+will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the ``first`` argument will be used to initialize the value of the ``first`` attribute in the returned instance.
 
 Methods
 .............
 
-The ``replace()`` methods  of the ``datetime.time`` and ``datetime.datetime`` classes will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the `first`` argument will be used to set the value of the ``first`` attribute in the returned instance.
+The ``replace()`` methods  of the ``datetime.time`` and ``datetime.datetime`` classes will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the ``first`` argument will be used to set the value of the ``first`` attribute in the returned instance.
 
 Affected behaviors
 -------------------------
@@ -76,12 +76,20 @@ full byte to store the actual boolean value.)
 Temporal arithmetics
 ----------------------------
 The value of "first" will be ignored in all operations except
-utcoffset() and dst() methods of tzinfo implementations and __eq__ and
-``__hash__`` methods of the datetime.datetime and datetime.time  classes.
-The only methods that will be able to  produce nonzero values of
+utcoffset() and dst() methods of tzinfo implementations.  The result addition (subtraction)
+of a timedelta to (from) a datetime will always have ``first`` set to ``True`` even if the
+original datetime instance had ``first=False``.
+
+(The only methods that will be able to  produce nonzero values of
 "first" are ``__new__`` and ``replace()`` methods of the ``datetime.datetime`` and
 ``datetime.time``  classes and ``fromutc()`` method of some tzinfo
-implementations.
+implementations.)
+
+Comparison
+----------
+Instances of ``datetime.time`` and  ``datetime.datetime`` classes that differ only by the value of their
+``first`` attribute will compare as equal.
+
 
 Backward and forward compatibility
 -----------------------------------------------
