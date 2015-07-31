@@ -128,3 +128,8 @@ Questions and Answers
  * Remaining possibilities:
  * "is_first"
  * "ltdf" (Local Time Disambiguation Flag) - short and no-one will attempt to guess what it means without reading the docs.
+ 
+Copyright
+=========
+
+This document has been placed in the public domain.
