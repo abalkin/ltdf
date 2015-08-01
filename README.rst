@@ -47,6 +47,10 @@ Methods
 
 The ``replace()`` methods  of the ``datetime.time`` and ``datetime.datetime`` classes will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the ``first`` argument will be used to set the value of the ``first`` attribute in the returned instance.
 
+The ``timestamp()`` method of ``datetime.datetime`` will return value advanced by 3600 if ``self`` represents an ambiguous hour and ``first`` is False.
+
+The ``fromtimestamp()`` static method of ``datetime.datetime`` will set the ``first`` attribute appropriately in the returned object. 
+
 Affected behaviors
 -------------------------
 
