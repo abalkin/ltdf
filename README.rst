@@ -62,13 +62,16 @@ these methods is proposed.
 Pickle size
 --------------
 Pickle sizes for the ``datetime.datetime`` and ``datetime.time`` objects will
-not change.  The ``first`` flag will be encoded in the first bit of the 4th byte of the ``datetime.datetime``
-pickle payload or the 1st byte of the datetime.time. In the `current
-implementation`_ these bytes are used to store hour value (0-23) and
+not change.  The ``first`` flag will be encoded in the first bit of the 5th byte of the ``datetime.datetime``
+pickle payload or the 2nd byte of the datetime.time. In the `current
+implementation`_ these bytes are used to store minute value (0-59) and
 the first bit is always 0.  Note that ``first=True`` will be encoded as 0
 in the first bit and ``first=False`` as 1.  (This change only affects
 pickle format.  In C implementation, the "first" member will get a
 full byte to store the actual boolean value.)
+
+We chose the minute byte to store the the "first" bit because this choice
+preserves the natural ordering.
 
 .. _current implementation: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
 
