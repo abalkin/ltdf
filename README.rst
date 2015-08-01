@@ -1,118 +1,139 @@
-***********
-Local time disambiguation in Python
-***********
+***********************************************************************
+                     Local Time Disambiguation
+***********************************************************************
 
-=======
+Abstract
+========
+
+This PEP adds a boolean member to the instances of ``datetime.time``
+and ``datetime.datetime`` classes that can be used to differentiate
+between two moments in time for which local times are the same.
+
 Rationale
-=======
+=========
 
 In the most world locations there have been and will be times when
 local clocks are moved back.  In those times intervals are introduced
-in which local clocks show the same time twice in the same day.   In
+in which local clocks show the same time twice in the same day.  In
 these situations, the information displayed on a local clock (or
 stored in a Python datetime instance) is insufficient to identify a
-particular moment in time.   The proposed solution is to add a
-boolean flag to the ``datetime`` instances that will distinguish between
-the two ambiguous times.
+particular moment in time.  The proposed solution is to add a boolean
+flag to the ``datetime`` instances that will distinguish between the
+two ambiguous times.
 
-=======
 Proposal
-=======
+========
 
 The "first" flag
-------------------
+----------------
 
-We propose adding a boolean member called ``first`` to the instances of
-``datetime.time`` and ``datetime.datetime`` classes.   This member should have the
-value True for all instances except those that represent the second
-(chronologically) moment in time in an ambiguous case.
+We propose adding a boolean member called ``first`` to the instances
+of ``datetime.time`` and ``datetime.datetime`` classes.  This member
+should have the value True for all instances except those that
+represent the second (chronologically) moment in time in an ambiguous
+case.
 
 Affected APIs
-------------------
+-------------
 
 Attributes
-...............
+..........
 
-Instances of ``datetime.time`` and ``datetime.datetime`` will get a new
-boolean attribute called "first."
+Instances of ``datetime.time`` and ``datetime.datetime`` will get a
+new boolean attribute called "first."
 
 Constructors
-....................
+............
 
-The ``__new__`` methods of the ``datetime.time`` and ``datetime.datetime`` classes
-will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the ``first`` argument will be used to initialize the value of the ``first`` attribute in the returned instance.
+The ``__new__`` methods of the ``datetime.time`` and
+``datetime.datetime`` classes will get a new keyword-only argument
+called ``first`` with the default value ``True``.  The value of the
+``first`` argument will be used to initialize the value of the
+``first`` attribute in the returned instance.
 
 Methods
-.............
+.......
 
-The ``replace()`` methods  of the ``datetime.time`` and ``datetime.datetime`` classes will get a new keyword-only argument called ``first`` with the default value ``True``.  The value of the ``first`` argument will be used to set the value of the ``first`` attribute in the returned instance.
+The ``replace()`` methods of the ``datetime.time`` and
+``datetime.datetime`` classes will get a new keyword-only argument
+called ``first`` with the default value ``True``.  The value of the
+``first`` argument will be used to set the value of the ``first``
+attribute in the returned instance.
 
-Affected behaviors
--------------------------
+Affected Behaviors
+------------------
 
-The ``timestamp()`` method of ``datetime.datetime`` will return value advanced by 3600 if ``self`` represents an ambiguous hour and ``first`` is False.
+The ``timestamp()`` method of ``datetime.datetime`` will return value
+advanced by 3600 if ``self`` represents an ambiguous hour and
+``first`` is False.
 
-The ``fromtimestamp()`` static method of ``datetime.datetime`` will set the ``first`` attribute appropriately in the returned object. 
+The ``fromtimestamp()`` static method of ``datetime.datetime`` will
+set the ``first`` attribute appropriately in the returned object.
 
 
 Implementations of tzinfo
-.......................................
+.........................
 
 Subclasses of ``datetime.tzinfo`` will read the values of ``first`` in
 ``utcoffset()`` and ``dst()`` methods and set it appropriately in the
-instances
-returned by the ``fromutc()`` method.  No change to the signatures of
-these methods is proposed.
+instances returned by the ``fromutc()`` method.  No change to the
+signatures of these methods is proposed.
 
 Pickle size
---------------
-Pickle sizes for the ``datetime.datetime`` and ``datetime.time`` objects will
-not change.  The ``first`` flag will be encoded in the first bit of the 5th byte of the ``datetime.datetime``
-pickle payload or the 2nd byte of the datetime.time. In the `current
-implementation`_ these bytes are used to store minute value (0-59) and
-the first bit is always 0.  Note that ``first=True`` will be encoded as 0
-in the first bit and ``first=False`` as 1.  (This change only affects
-pickle format.  In C implementation, the "first" member will get a
-full byte to store the actual boolean value.)
+-----------
 
-We chose the minute byte to store the the "first" bit because this choice
-preserves the natural ordering.
+Pickle sizes for the ``datetime.datetime`` and ``datetime.time``
+objects will not change.  The ``first`` flag will be encoded in the
+first bit of the 5th byte of the ``datetime.datetime`` pickle payload
+or the 2nd byte of the datetime.time. In the `current implementation`_
+these bytes are used to store minute value (0-59) and the first bit is
+always 0.  Note that ``first=True`` will be encoded as 0 in the first
+bit and ``first=False`` as 1.  (This change only affects pickle
+format.  In C implementation, the "first" member will get a full byte
+to store the actual boolean value.)
+
+We chose the minute byte to store the the "first" bit because this
+choice preserves the natural ordering.
 
 .. _current implementation: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
 
+Temporal Arithmetics
+--------------------
 
-Temporal arithmetics
-----------------------------
-The value of "first" will be ignored in all operations except
-utcoffset() and dst() methods of tzinfo implementations.  The result addition (subtraction)
-of a timedelta to (from) a datetime will always have ``first`` set to ``True`` even if the
+The value of "first" will be ignored in all operations except those
+that involve conversion between timezones.
+
+The result of addition (subtraction) of a timedelta to (from) a
+datetime will always have ``first`` set to ``True`` even if the
 original datetime instance had ``first=False``.
 
-(The only methods that will be able to  produce nonzero values of
-"first" are ``__new__`` and ``replace()`` methods of the ``datetime.datetime`` and
-``datetime.time``  classes and ``fromutc()`` method of some tzinfo
-implementations.)
+(The only methods that will be able to produce non-default value of
+"first" are ``__new__``, and ``replace()`` methods of the
+``datetime.datetime`` and ``datetime.time`` classes ``now()`` and
+``fromtimestamp()`` methods of the ``datetime.datetime`` class, and
+``fromutc()`` method of some tzinfo implementations.)
 
 Comparison
 ----------
-Instances of ``datetime.time`` and  ``datetime.datetime`` classes that differ only by the value of their
-``first`` attribute will compare as equal.
+
+Instances of ``datetime.time`` and ``datetime.datetime`` classes that
+differ only by the value of their ``first`` attribute will compare as
+equal.
 
 
-Backward and forward compatibility
------------------------------------------------
+Backward and Forward Compatibility
+----------------------------------
 
 This proposal will have no effect on the programs that do not set the
 ``first`` flag explicitly or use tzinfo implementations that do.
 Pickles produced by older programs will remain fully forward
-compatible.  Only datetime/time instances with ``first=False`` pickled in
-the new versions will become unreadable by the older Python versions.
-Pickles of instances with ``first=True`` (which is the default) will remain unchanged.
+compatible.  Only datetime/time instances with ``first=False`` pickled
+in the new versions will become unreadable by the older Python
+versions.  Pickles of instances with ``first=True`` (which is the
+default) will remain unchanged.
 
-
-==================
 Questions and Answers
-==================
+=====================
 
 1. Why not call the new flag "isdst"?
 
@@ -147,7 +168,6 @@ Questions and Answers
  
    * "ltdf" (Local Time Disambiguation Flag) - short and no-one will attempt to guess what it means without reading the docs.
 
-=========
 Copyright
 =========
 
