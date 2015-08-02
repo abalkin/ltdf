@@ -171,6 +171,13 @@ Questions and Answers
  
    * "ltdf" (Local Time Disambiguation Flag) - short and no-one will attempt to guess what it means without reading the docs.
 
+Implementation
+==============
+
+	* Github fork: https://github.com/abalkin/cpython
+        * Tracker issue: http://bugs.python.org/issue24773
+
+
 Copyright
 =========
 
