@@ -2,7 +2,7 @@
                      Local Time Disambiguation
 ***********************************************************************
 
-.. image:: Daylightsavings.png
+.. image:: pep-0495-daylightsavings.png
    :align: center
 
 Abstract
