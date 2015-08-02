@@ -1,3 +1,15 @@
+PEP: 495
+Title: Local Time Disambiguation
+Version: $Revision$
+Last-Modified: $Date$
+Author: Alexander Belopolsky <alexander.belopolsky@gmail.com>
+Discussions-To: Datetime-SIG <datetime-sig@python.org>
+Status: Draft
+Type: Standards Track
+Content-Type: text/x-rst
+Created: 02-Aug-2015
+
+
 ***********************************************************************
                      Local Time Disambiguation
 ***********************************************************************
