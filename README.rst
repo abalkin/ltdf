@@ -2,6 +2,9 @@
                      Local Time Disambiguation
 ***********************************************************************
 
+.. image:: fzdqh.jpg
+   :align: center
+
 Abstract
 ========
 
