@@ -2,7 +2,7 @@
                      Local Time Disambiguation
 ***********************************************************************
 
-.. image:: fzdqh.jpg
+.. image:: Daylightsavings.svg
    :align: center
 
 Abstract
@@ -175,3 +175,12 @@ Copyright
 =========
 
 This document has been placed in the public domain.
+
+
+Picture Credit
+==============
+
+This image is a work of a U.S. military or Department of Defense
+employee, taken or made as part of that person's official duties. As a
+work of the U.S. federal government, the image is in the public
+domain.
