@@ -85,12 +85,68 @@ attribute is copied to the result.
 Affected Behaviors
 ------------------
 
-The ``timestamp()`` method of ``datetime.datetime`` will return value
-advanced by 3600 if ``self`` represents an ambiguous hour and
-``first`` is False.
+Conversion to POSIX seconds from EPOCH
+......................................
+
+The ``timestamp()`` method of ``datetime.datetime`` will return different
+values for ``datetime.datetime`` instances that differ only by the value
+of their ``first`` attribute if and only if these instances represent an
+ambiguous or a non-existent value.
+
+When a ``datetime.datetime`` instance ``dt`` represents an ambiguous
+(repeated) time, there are two values ``s0`` and ``s1`` such that::
+
+  datetime.fromtimestamp(s0) == datetime.fromtimestamp(s1) == dt
+
+In this case, ``dt.timestamp()`` will return the smaller of ``s0``
+and ``s1`` values if ``dt.first == True`` and the larger otherwise.
+
+
+For example, on a system set to US/Eastern timezone::
+
+  >>> datetime(2014, 11, 2, 1, 30, first=True).timestamp()
+  1414906200.0
+  >>> datetime(2014, 11, 2, 1, 30, first=False).timestamp()
+  1414909800.0
+
+
+When a ``datetime.datetime`` instance ``dt`` represents an invalid
+time, there is no value ``s`` for which::
+
+  datetime.fromtimestamp(s) == dt
+
+but we can form two "nice to know" values of ``s`` that differ
+by the size of the gap in seconds.  One is the value of ``s``
+that would correspond to ``dt`` in a timezone where the UTC offset
+is always the same as the offset right before the gap and the
+other is the similar value but in a timezone the  UTC offset
+is always the same as the offset right after the gap.
+
+The value returned by ``dt.timestamp()`` given the invalid
+``dt`` will be the larger of the two "nice to know" values
+if ``dt.first  == True`` and the larger otherwise.
+
+For example, on a system set to US/Eastern timezone::
+
+  >>> datetime(2015, 3, 8, 2, 30, first=True).timestamp()
+  1425799800.0
+  >>> datetime(2015, 3, 8, 2, 30, first=False).timestamp()
+  1425796200.0
+
+
+Conversion from POSIX seconds from EPOCH
+........................................
+
 
 The ``fromtimestamp()`` static method of ``datetime.datetime`` will
 set the ``first`` attribute appropriately in the returned object.
+
+For example, on a system set to US/Eastern timezone::
+
+  >>> datetime.fromtimestamp(1414906200)
+  datetime.datetime(2014, 11, 2, 1, 30)
+  >>> datetime.fromtimestamp(1414906200 + 3600)
+  datetime.datetime(2014, 11, 2, 1, 30, first=False)
 
 
 Implementations of tzinfo
