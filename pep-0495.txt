@@ -164,21 +164,29 @@ Questions and Answers
 
 2. Why "first"?
 
-* Rejections
+* Rejections:
+
+  **second**   
+      rejected because "second" is already there.
    
-   * Because "second" is already there.
+  **later**
+      rejected because "later" is confusable with "latter".
    
-   * Because "later" is confusable with "latter".
-   
-   * Because "earlier" has the same issue as "first" (requires default to be True) but is two characters longer.
+  **earlier**
+      rejected because "earlier" has the same issue as "first" (requires
+      default to be True) but is two characters longer.
    
 * Remaining possibilities:
  
-   * "repeated"
+  **repeated**
+      this is a strong candidate
  
-   * "is_first"
+  **is_first**
+      arguably more grammatically correct than "first"
  
-   * "ltdf" (Local Time Disambiguation Flag) - short and no-one will attempt to guess what it means without reading the docs.
+  **ltdf**
+      (Local Time Disambiguation Flag) - short and no-one will
+      attempt to guess what it means without reading the docs.
 
 Implementation
 ==============
