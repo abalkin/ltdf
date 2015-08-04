@@ -72,9 +72,15 @@ Methods
 
 The ``replace()`` methods of the ``datetime.time`` and
 ``datetime.datetime`` classes will get a new keyword-only argument
-called ``first`` with the default value ``True``.  The value of the
-``first`` argument will be used to set the value of the ``first``
-attribute in the returned instance.
+called ``first`` with the default value ``True``.  It will
+becave similarly to the other ``replace()`` arguments: if the ``first``
+argument is specified and given a boolean value, the new instance
+returned by ``replace()`` will have its ``first`` attribute set
+to that value.  In CPython, a non-boolean value of ``first`` will
+raise a ``TypeError``, but other implementations may allow the value
+``None`` to behave the same as when ``first`` is not given.  If the
+``first`` argument is not specified, the original value of the ``first``
+attribute is copied to the result.   
 
 Affected Behaviors
 ------------------
