@@ -10,8 +10,6 @@ Content-Type: text/x-rst
 Created: 02-Aug-2015
 
 
-.. image:: pep-0495-daylightsavings.png
-   :align: center
 
 Abstract
 ========
@@ -19,6 +17,13 @@ Abstract
 This PEP adds a boolean member to the instances of ``datetime.time``
 and ``datetime.datetime`` classes that can be used to differentiate
 between two moments in time for which local times are the same.
+
+.. sidebar:: US public service advertisement
+
+  .. image:: pep-0495-daylightsavings.png
+     :align: right
+     :width: 15%
+
 
 Rationale
 =========
