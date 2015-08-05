@@ -85,6 +85,14 @@ attribute is copied to the result.
 Affected Behaviors
 ------------------
 
+Conversion from naive to aware
+..............................
+
+The ``astimezone()`` method will now work for naive ``self``.  The
+system local timezone will be assumed in this case and the ``first``
+flag will be used to determine which local timezone is in effect
+in the ambiguous case.
+
 Conversion to POSIX seconds from EPOCH
 ......................................
 
