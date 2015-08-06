@@ -93,6 +93,14 @@ system local timezone will be assumed in this case and the ``first``
 flag will be used to determine which local timezone is in effect
 in the ambiguous case.
 
+For example, on a system set to US/Eastern timezone::
+
+  >>> dt = datetime(2014, 11, 2, 1, 30)
+  >>> dt.astimezone().strftime('%D %T %Z%z')
+  '11/02/14 01:30:00 EDT-0400'
+  >>> dt.replace(first=False).astimezone().strftime('%D %T %Z%z')
+  '11/02/14 01:30:00 EST-0500'
+
 Conversion to POSIX seconds from EPOCH
 ......................................
 
