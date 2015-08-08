@@ -165,13 +165,77 @@ For example, on a system set to US/Eastern timezone::
   datetime.datetime(2014, 11, 2, 1, 30, first=False)
 
 
-Implementations of tzinfo
-.........................
+Implementations of tzinfo in stdlib
+...................................
 
-Subclasses of ``datetime.tzinfo`` will read the values of ``first`` in
-``utcoffset()`` and ``dst()`` methods and set it appropriately in the
-instances returned by the ``fromutc()`` method.  No change to the
-signatures of these methods is proposed.
+No new implementations of ``datetime.tzinfo`` abstract class are
+introduced in this PEP.  The existing (fixed offset) timezones do
+not introduce ambiguous local times and their ``utcoffset()``
+implementation will return the same constant value as they do now
+regardless of the value of ``first``. 
+
+New guidelines will be published for implementing concrete timezones
+with variable UTC offset.
+
+
+Guidelines for new tzinfo implementations
+-----------------------------------------
+
+Implementors of concrete ``datetime.tzinfo`` subclasses who want to
+support variable UTC offsets (due to DST and other causes) must follow
+these guidelines.
+
+New subclasses should override the baseclass ``fromutc()`` method so
+that in all cases where two UTC times ``u1`` and ``u2`` (``u1`` <``u2``)
+corespond to the same local time ``fromutc(u1)`` will return an instance
+with ``first=True`` and ``fromutc(u1)`` will return an instance
+with ``first=False``.
+
+New implementations of ``utcoffset()`` and ``dst()`` methods should
+ignore the value of ``first`` unless they are called on the ambiguous
+or invalid times.
+
+On an ambiguous time introduced at the end of DST, the values returned
+by ``utcoffset()`` and ``dst()`` methods should be as follows
+
++-----------------+----------------+------------------+
+|                 |   first=True   |    first=False   |
++-----------------+----------------+------------------+
+|   utcoff()      | stdoff + hour  |    stdoff        |
++-----------------+----------------+------------------+
+|    dst()        |     hour       |     zero         |
++-----------------+----------------+------------------+
+
+where ``stdoff`` is the standard (non-DST) offset,
+``hour = timedelta(hours=1)`` and ``zero = timedelta(0)``.
+
+On an invalid time introduced at the start of DST, the values returned
+by ``utcoffset()`` and ``dst()`` methods should	be as follows
+
+
++-----------------+----------------+------------------+
+|                 |   first=True   |    first=False   |
++-----------------+----------------+------------------+
+|   utcoff()      |     stdoff     |    stdoff + hour |
++-----------------+----------------+------------------+
+|    dst()        |     zero       |     hour         |
++-----------------+----------------+------------------+
+
+
+On ambiguous/invalid times introduced by the change in the standard time
+offset, the ``dst()`` method should return the same value regardless of
+the value of ``first`` and the ``utcoff()`` should return values
+according to the following table:
+
++-----------------+----------------+-----------------------------+
+|                 |   first=True   |    first=False              |
++-----------------+----------------+-----------------------------+
+|   ambiguous     |     oldoff     |     newoff = oldoff - delta |
++-----------------+----------------+-----------------------------+
+|   invalid       |     oldoff     |     newoff = oldoff + delta |
++-----------------+----------------+-----------------------------+
+
+
 
 Pickle size
 -----------
