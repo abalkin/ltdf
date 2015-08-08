@@ -29,7 +29,7 @@ Rationale
 =========
 
 In the most world locations there have been and will be times when
-local clocks are moved back.  In those times intervals are introduced
+local clocks are moved back.  In those times, intervals are introduced
 in which local clocks show the same time twice in the same day.  In
 these situations, the information displayed on a local clock (or
 stored in a Python datetime instance) is insufficient to identify a
@@ -72,8 +72,8 @@ Methods
 
 The ``replace()`` methods of the ``datetime.time`` and
 ``datetime.datetime`` classes will get a new keyword-only argument
-called ``first`` with the default value ``True``.  It will
-becave similarly to the other ``replace()`` arguments: if the ``first``
+called ``first``.  It will
+behave similarly to the other ``replace()`` arguments: if the ``first``
 argument is specified and given a boolean value, the new instance
 returned by ``replace()`` will have its ``first`` attribute set
 to that value.  In CPython, a non-boolean value of ``first`` will
