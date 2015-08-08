@@ -165,11 +165,14 @@ For example, on a system set to US/Eastern timezone::
   datetime.datetime(2014, 11, 2, 1, 30, first=False)
 
 
-Combining date and time
+Combining and splitting date and time
 .......................
 
 The ``datetime.datetime.combine`` method will copy the value of the
 ``first`` atribute to the resulting ``datetime.datetime`` instance.
+
+The ``datetime.datetime.time`` method will copy the value of the
+``first`` atribute to the resulting ``datetime.time`` instance.
 
 
 Implementations of tzinfo in stdlib
