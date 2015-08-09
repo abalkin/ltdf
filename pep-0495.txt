@@ -281,14 +281,6 @@ The result of addition (subtraction) of a timedelta to (from) a
 datetime will always have ``first`` set to ``True`` even if the
 original datetime instance had ``first=False``.
 
-(The only methods that will be able to produce non-default value of
-"first" are ``__new__``, and ``replace()`` methods of the
-``datetime.datetime`` and ``datetime.time`` classes ``now()``,
-``astimezone()`` and ``fromtimestamp()`` methods of the
-``datetime.datetime`` class, and ``fromutc()`` method of some tzinfo
-implementations.)
-
-
 .. [#] As of Python 3.5, ``tzinfo`` is ignored whenever timedelta is
    added or subtracted from a ``datetime.datetime`` instance or when
    one ``datetime.datetime`` instance is subtracted from another with
