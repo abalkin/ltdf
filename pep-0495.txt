@@ -47,7 +47,18 @@ We propose adding a boolean member called ``first`` to the instances
 of ``datetime.time`` and ``datetime.datetime`` classes.  This member
 should have the value True for all instances except those that
 represent the second (chronologically) moment in time in an ambiguous
-case.
+case. [#]_
+
+.. [#] An instance that has ``first=False`` in a non-ambiguous case is
+  said to represent an invalid time (or is invalid for short), but
+  users are not prevented from creating invalid instances by passing
+  ``first=False`` to a constructor or to a ``replace()`` method.  This
+  is similar to the current situation with the instances that fall in
+  the spring-forward gap.  Such instances don't represent any valid
+  time, but neither the constructors nor the ``replace()`` methods
+  check whether the instances that they produce are valid.  Moreover,
+  this PEP specifies how various functions should behave when given an
+  invalid instance.
 
 Affected APIs
 -------------
@@ -166,7 +177,7 @@ For example, on a system set to US/Eastern timezone::
 
 
 Combining and splitting date and time
-.......................
+.....................................
 
 The ``datetime.datetime.combine`` method will copy the value of the
 ``first`` attribute to the resulting ``datetime.datetime`` instance.
