@@ -122,7 +122,7 @@ Return the value of ``first`` as a C99 ``bool``.
 Return the value of ``first`` as a C99 ``bool``.
 
 Additional constructors will be defined that will take an additional
-boolean argument to specify the value of ``first`` in the cleated
+boolean argument to specify the value of ``first`` in the created
 instance:
 
 .. code::
