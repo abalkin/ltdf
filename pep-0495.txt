@@ -49,10 +49,10 @@ two ambiguous times.
 Terminology
 ===========
 
-When clocks are moved back, we say that a *fold* is created in the
-fabric of time.  When the clock are moved forward, a *gap* is created.
-A local time that falls in the fold is called *ambiguous*.  A local
-time that falls in the gap is called *missing*.
+When clocks are moved back, we say that a *fold* is created in time.
+When the clock are moved forward, a *gap* is created.  A local time
+that falls in the fold is called *ambiguous*.  A local time that falls
+in the gap is called *missing*.
 
 
 Proposal
