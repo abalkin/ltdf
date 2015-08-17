@@ -276,15 +276,15 @@ Guidelines for new tzinfo implementations
 -----------------------------------------
 
 Implementors of concrete ``datetime.tzinfo`` subclasses who want to
-support variable UTC offsets (due to DST and other causes) must follow
+support variable UTC offsets (due to DST and other causes) should follow
 these guidelines.
 
-New subclasses must override the base-class ``fromutc()`` method and
+New subclasses should override the base-class ``fromutc()`` method and
 implement it so that in all cases where two UTC times ``u1`` and
 ``u2`` (``u1`` <``u2``) correspond to the same local time
 ``fromutc(u1)`` will return an instance with ``first=True`` and
 ``fromutc(u2)`` will return an instance with ``first=False``.  In all
-other cases the returned instance must have ``first=True``.
+other cases the returned instance should have ``first=True``.
 
 New implementations of ``utcoffset()`` and ``dst()`` methods should
 ignore the value of ``first`` unless they are called on the ambiguous
