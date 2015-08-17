@@ -29,7 +29,7 @@ Rationale
 =========
 
 In the most world locations there have been and will be times when
-local clocks are moved back.  In those times, intervals are introduced
+local clocks are moved back. [#]_  In those times, intervals are introduced
 in which local clocks show the same time twice in the same day.  In
 these situations, the information displayed on a local clock (or
 stored in a Python datetime instance) is insufficient to identify a
@@ -37,6 +37,14 @@ particular moment in time.  The proposed solution is to add a boolean
 flag to the ``datetime`` instances that will distinguish between the
 two ambiguous times.
 
+.. [#]: People who live in locations observing the Daylight Saving
+  Time (DST) move their clocks back (usually one hour) every Fall.  It
+  is less common, but occasionally clocks can be moved back for other
+  reasons.  For example, Ukraine switched from Moscow Time to Easter
+  European Time in the summer of 1990 while also keeping the DST in
+  effect before and after the transition.  As a result, the clocks in
+  Ukraine were moved back twice in that year.  Both DST and standard
+  time changes may result in time shifts other than an hour.
 
 Terminology
 ===========
