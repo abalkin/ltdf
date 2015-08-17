@@ -167,6 +167,21 @@ For example, on a system set to US/Eastern timezone::
   >>> dt.replace(first=False).astimezone().strftime('%D %T %Z%z')
   '11/02/14 01:30:00 EST-0500'
 
+
+Conversion from POSIX seconds from EPOCH
+........................................
+
+The ``fromtimestamp()`` static method of ``datetime.datetime`` will
+set the ``first`` attribute appropriately in the returned object.
+
+For example, on a system set to US/Eastern timezone::
+
+  >>> datetime.fromtimestamp(1414906200)
+  datetime.datetime(2014, 11, 2, 1, 30)
+  >>> datetime.fromtimestamp(1414906200 + 3600)
+  datetime.datetime(2014, 11, 2, 1, 30, first=False)
+
+
 Conversion to POSIX seconds from EPOCH
 ......................................
 
@@ -214,21 +229,6 @@ For example, on a system set to US/Eastern timezone::
   1425799800.0
   >>> datetime(2015, 3, 8, 2, 30, first=False).timestamp()
   1425796200.0
-
-
-Conversion from POSIX seconds from EPOCH
-........................................
-
-
-The ``fromtimestamp()`` static method of ``datetime.datetime`` will
-set the ``first`` attribute appropriately in the returned object.
-
-For example, on a system set to US/Eastern timezone::
-
-  >>> datetime.fromtimestamp(1414906200)
-  datetime.datetime(2014, 11, 2, 1, 30)
-  >>> datetime.fromtimestamp(1414906200 + 3600)
-  datetime.datetime(2014, 11, 2, 1, 30, first=False)
 
 
 Combining and splitting date and time
