@@ -151,6 +151,18 @@ second, microsecond and first.
 Affected Behaviors
 ------------------
 
+What time is it?
+................
+
+The ``datetime.now()`` method called with no arguments, will set
+``first=False`` when returning the second of the two ambiguous times
+in a fold.  When called with a ``tzinfo`` argument, the value of the
+``first`` will be determined by the ``tzinfo.fromutc()``
+implementation.  If an instance of the built-in ``datetime.timezone``
+is passed as ``tzinfo``, the returned datetime instance will always
+have ``first=True``.
+
+
 Conversion from naive to aware
 ..............................
 
