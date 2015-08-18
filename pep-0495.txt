@@ -21,8 +21,8 @@ between two moments in time for which local times are the same.
 .. sidebar:: US public service advertisement
 
   .. image:: pep-0495-daylightsavings.png
-     :align: right
-     :width: 15%
+     :align: center
+     :width: 95%
 
 
 Rationale
@@ -37,14 +37,19 @@ particular moment in time.  The proposed solution is to add a boolean
 flag to the ``datetime`` instances that will distinguish between the
 two ambiguous times.
 
-.. [#]: People who live in locations observing the Daylight Saving
-  Time (DST) move their clocks back (usually one hour) every Fall.  It
-  is less common, but occasionally clocks can be moved back for other
-  reasons.  For example, Ukraine switched from Moscow Time to Easter
-  European Time in the summer of 1990 while also keeping the DST in
-  effect before and after the transition.  As a result, the clocks in
-  Ukraine were moved back twice in that year.  Both DST and standard
-  time changes may result in time shifts other than an hour.
+.. [#] People who live in locations observing the Daylight Saving
+  Time (DST) move their clocks back (usually one hour) every Fall.
+  
+  It is less common, but occasionally clocks can be moved back for
+  other reasons.  For example, Ukraine skipped the spring-forward
+  transition in March 1990 and instead, moved their clocks back on
+  July 1, 1990, switching from Moscow Time to Easter European Time.
+  In that case, standard (winter) time was in effect before and after
+  the transition.
+
+  Both DST and standard time changes may result in time shifts other
+  than an hour.
+
 
 Terminology
 ===========
