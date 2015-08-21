@@ -301,13 +301,14 @@ by ``utcoffset()`` and ``dst()`` methods should be as follows
 +-----------------+----------------+------------------+
 |                 |   first=True   |    first=False   |
 +=================+================+==================+
-|   utcoff()      | stdoff + hour  |    stdoff        |
+| utcoffset()     | stdoff + dstoff|    stdoff        |
 +-----------------+----------------+------------------+
-|    dst()        |     hour       |     zero         |
+|    dst()        |     dstoff     |     zero         |
 +-----------------+----------------+------------------+
 
-where ``stdoff`` is the standard (non-DST) offset,
-``hour = timedelta(hours=1)`` and ``zero = timedelta(0)``.
+where ``stdoff`` is the standard (non-DST) offset, ``dstoff`` is the
+DST correction (typically ``dstoff = timedelta(hours=1)``) and ``zero
+= timedelta(0)``.
 
 On a missing time introduced at the start of DST, the values returned
 by ``utcoffset()`` and ``dst()`` methods should	be as follows
@@ -316,15 +317,15 @@ by ``utcoffset()`` and ``dst()`` methods should	be as follows
 +-----------------+----------------+------------------+
 |                 |   first=True   |    first=False   |
 +=================+================+==================+
-|   utcoff()      |     stdoff     |    stdoff + hour |
+|  utcoffset()    |     stdoff     |  stdoff + dstoff |
 +-----------------+----------------+------------------+
-|    dst()        |     zero       |     hour         |
+|    dst()        |     zero       |     dstoff       |
 +-----------------+----------------+------------------+
 
 
 On ambiguous/missing times introduced by the change in the standard time
 offset, the ``dst()`` method should return the same value regardless of
-the value of ``first`` and the ``utcoff()`` should return values
+the value of ``first`` and the ``utcoffset()`` should return values
 according to the following table:
 
 +-----------------+----------------+-----------------------------+
@@ -335,6 +336,7 @@ according to the following table:
 |   missing       |     oldoff     |     newoff = oldoff + delta |
 +-----------------+----------------+-----------------------------+
 
+where ``delta`` is the size of the fold or the gap.
 
 
 Pickle size
