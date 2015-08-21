@@ -273,9 +273,6 @@ used anywhere in the stdlib because the only included ``tzinfo``
 implementation (the ``datetime.timzeone`` class implementing fixed
 offset timezones) override ``fromutc()``.
 
-New guidelines will be published for implementing concrete timezones
-with variable UTC offset.
-
 
 Guidelines for new tzinfo implementations
 -----------------------------------------
