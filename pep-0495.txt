@@ -43,7 +43,7 @@ two ambiguous times.
   It is less common, but occasionally clocks can be moved back for
   other reasons.  For example, Ukraine skipped the spring-forward
   transition in March 1990 and instead, moved their clocks back on
-  July 1, 1990, switching from Moscow Time to Easter European Time.
+  July 1, 1990, switching from Moscow Time to Eastern European Time.
   In that case, standard (winter) time was in effect before and after
   the transition.
 
