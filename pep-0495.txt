@@ -55,7 +55,7 @@ Terminology
 ===========
 
 When clocks are moved back, we say that a *fold* is created in time.
-When the clock are moved forward, a *gap* is created.  A local time
+When the clocks are moved forward, a *gap* is created.  A local time
 that falls in the fold is called *ambiguous*.  A local time that falls
 in the gap is called *missing*.
 
@@ -205,10 +205,10 @@ Conversion to POSIX seconds from EPOCH
 The ``timestamp()`` method of ``datetime.datetime`` will return different
 values for ``datetime.datetime`` instances that differ only by the value
 of their ``first`` attribute if and only if these instances represent an
-ambiguous or a non-existent time.
+ambiguous or a missing time.
 
 When a ``datetime.datetime`` instance ``dt`` represents an ambiguous
-(repeated) time, there are two values ``s0`` and ``s1`` such that::
+time, there are two values ``s0`` and ``s1`` such that::
 
   datetime.fromtimestamp(s0) == datetime.fromtimestamp(s1) == dt
 
