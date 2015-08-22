@@ -367,11 +367,12 @@ The result of addition (subtraction) of a timedelta to (from) a
 datetime will always have ``first`` set to ``True`` even if the
 original datetime instance had ``first=False``.
 
-.. [#] As of Python 3.5, ``tzinfo`` is ignored whenever timedelta is
-   added or subtracted from a ``datetime.datetime`` instance or when
-   one ``datetime.datetime`` instance is subtracted from another with
-   the same (even not-None) ``tzinfo``.  This may change in the future,
-   but such changes are outside of the scope of this PEP.
+.. [#] Computing a difference between two aware datetime instances
+   with different values of ``tzinfo`` involves an implicit timezone
+   conversion.  In this case, the result may depend on the value of
+   the ``first`` flag in either of the instances, but only if the
+   instance has ``tzinfo`` that accounts for the value of ``first``
+   in its ``utcoffset()`` method.
 
 
 Backward and Forward Compatibility
