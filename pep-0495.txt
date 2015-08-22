@@ -68,7 +68,7 @@ The "first" flag
 
 We propose adding a boolean member called ``first`` to the instances
 of ``datetime.time`` and ``datetime.datetime`` classes.  This member
-should have the value True for all instances except those that
+should have the value ``True`` for all instances except those that
 represent the second (chronologically) moment in time in an ambiguous
 case. [#]_
 
@@ -409,13 +409,15 @@ default) will remain unchanged.
 Questions and Answers
 =====================
 
-1. Why not call the new flag "isdst"?
+Why not call the new flag "isdst"?
+----------------------------------
 
--------
+A non-technical answer
+......................
 
-* Alice:  Bob - let's have a stargazing party at 01:30 AM tomorrow!
-* Bob:  Should I presume initially that summer time (for example, Daylight
-  Saving Time) is or is not (respectively) in effect for the specified time?
+* Alice: Bob - let's have a stargazing party at 01:30 AM tomorrow!
+* Bob: Should I presume initially that Daylight Saving Time is or is
+  not in effect for the specified time?
 * Alice: Huh?
 
 -------
@@ -424,32 +426,77 @@ Questions and Answers
 * Alice: You know, Bob, 01:30 AM will happen twice tomorrow. Which time do you have in mind?
 * Bob:  I did not think about it, but let's pick the first.
 
+-------
 
-2. Why "first"?
+A technical reason
+..................
 
-* Rejections:
+While the ``tm_isdst`` field of the ``time.struct_time`` object can be
+used to disambiguate local times in the fold, the semantics of such
+disambiguation are completely different from the proposal in this PEP.
 
-  **second**   
-      rejected because "second" is already there.
+The main problem with the ``tm_isdst`` field is that it is impossible
+to know what value is appropriate for ``tm_isdst`` without knowing the
+details about the time zone that are only available to the ``tzinfo``
+implementation.  Thus while ``tm_isdst`` is useful in the *output* of
+methods such as ``time.localtime``, it is cumbursome as an *input* of
+methods such as ``time.mktime``.
+
+If the programmer misspecifies a non-negative value of ``tm_isdst`` to
+``time.mktime``, the result will be time that is 1 hour off and since
+there is rarely a way to know anything about DST *before* a call to
+``time.mktime`` is made, the only sane choice is usually
+``tm_isdst=-1``.
+
+Unlike ``tm_isdst``, the proposed ``first`` flag has no effect on the
+interpretation of the datetime instance unless without that flag two
+(or no) interpretations are possible.
+
+Since it would be very confusing to have something called ``isdst``
+that does not have the same semantics as ``tm_isdst``, we need a
+different name.  Moreover, the ``datetime.datetime`` class already has
+a method called ``dst()`` and if we called ``first`` "isdst", we would
+necessarily have situations when "isdst" and ``bool(dst())`` values
+are different.
+
+
+Why "first"?
+------------
+
+This is a working name chosen initially because the obvious
+alternative ("second") conflicts with the existing attribute.  It has
+since became clear that it is desirable to have a flag with the
+default value ``False`` and such that chronological ordering of
+disambiguated (datetime, flag) pairs would match their lexicographical
+order.
+
+The following alternative names have been proposed:
+
+  **fold**
+      Suggested by Guido van Rossum and favored by the author.  Has
+      correct connotations and easy mnemonic rules, but at the same
+      time does not invite unbased assumptions.
    
   **later**
-      rejected because "later" is confusable with "latter".
-   
-  **earlier**
-      rejected because "earlier" has the same issue as "first" (requires
-      default to be True) but is two characters longer.
-   
-* Remaining possibilities:
- 
+      A close contender to "fold".  The author dislikes it because
+      it is confusable with equally fitting "latter," but in the age
+      of autocompletion everywhere this is a small consideration.  A
+      stronger objection may be that in the case of missing time, we
+      will have ``later=True`` instance converted to an earlier time by
+      ``.astimezone(timezone.utc)`` that that with ``later=False``.
+      Yet again, this can be interpreted as a desirable indication that
+      the original time is invalid.
+      
   **repeated**
-      this is a strong candidate
- 
-  **is_first**
-      arguably more grammatically correct than "first"
+      Did not receive any support on the mailing list.
  
   **ltdf**
-      (Local Time Disambiguation Flag) - short and no-one will
-      attempt to guess what it means without reading the docs.
+      (Local Time Disambiguation Flag) - short and no-one will attempt
+      to guess what it means without reading the docs.  (Feel free to
+      use it in discussions with the meaning ltdf=False is the
+      earlier if you don't want to endorse any of the alternatives
+      above.)
+
 
 Implementation
 ==============
