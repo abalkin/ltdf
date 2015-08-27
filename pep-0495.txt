@@ -14,7 +14,7 @@ Created: 02-Aug-2015
 Abstract
 ========
 
-This PEP adds a new attribute `fold` to the instances of
+This PEP adds a new attribute ``fold`` to the instances of
 ``datetime.time`` and ``datetime.datetime`` classes that can be used
 to differentiate between two moments in time for which local times are
 the same.  The allowed values for the `fold` attribute will be 0 and 1
@@ -32,13 +32,13 @@ Rationale
 =========
 
 In the most world locations there have been and will be times when
-local clocks are moved back. [#]_  In those times, intervals are introduced
-in which local clocks show the same time twice in the same day.  In
-these situations, the information displayed on a local clock (or
-stored in a Python datetime instance) is insufficient to identify a
-particular moment in time.  The proposed solution is to add a boolean
-flag to the ``datetime`` instances that will distinguish between the
-two ambiguous times.
+local clocks are moved back. [#]_ In those times, intervals are
+introduced in which local clocks show the same time twice in the same
+day.  In these situations, the information displayed on a local clock
+(or stored in a Python datetime instance) is insufficient to identify
+a particular moment in time.  The proposed solution is to add an
+attribute to the ``datetime`` instances taking values of 0 and 1 that
+will enumerate the two ambiguous times.
 
 .. [#] People who live in locations observing the Daylight Saving
   Time (DST) move their clocks back (usually one hour) every Fall.
@@ -57,17 +57,24 @@ two ambiguous times.
 Terminology
 ===========
 
-When clocks are moved back, we say that a *fold* is created in time.
+When clocks are moved back, we say that a *fold* [#]_ is created in time.
 When the clocks are moved forward, a *gap* is created.  A local time
 that falls in the fold is called *ambiguous*.  A local time that falls
 in the gap is called *missing*.
+
+.. [#] The term "fall-backward fold" was invented in 1990s by Paul Eggert
+  of UCLA who used it in various Internet discussions related to the C language
+  standard that culminated in a `Defect Report #139`_.
+
+.. _Defect Report #139: http://www.open-std.org/jtc1/sc22/wg14/docs/rr/dr_136.html
+
 
 
 Proposal
 ========
 
-The "fold" flag
-----------------
+The "fold" attribute
+--------------------
 
 We propose adding an attribute called ``fold`` to the instances
 of ``datetime.time`` and ``datetime.datetime`` classes.  This attribute
@@ -92,8 +99,8 @@ Affected APIs
 Attributes
 ..........
 
-Instances of ``datetime.time`` and ``datetime.datetime`` will get a
-new boolean attribute called "fold."
+Instances of ``datetime.time`` and ``datetime.datetime`` classes will
+get a new attribute ``fold`` with two possible values: 0 and 1.
 
 Constructors
 ............
@@ -137,8 +144,8 @@ Return the value of ``fold`` as a C ``int``.
 
 Return the value of ``fold`` as a C ``int``.
 
-Additional constructors will be defined that will take an additional
-boolean argument to specify the value of ``fold`` in the created
+New constructors will be defined that will take an additional
+argument to specify the value of ``fold`` in the created
 instance:
 
 .. code::
@@ -163,12 +170,12 @@ What time is it?
 ................
 
 The ``datetime.now()`` method called with no arguments, will set
-``fold=1`` when returning the second of the two ambiguous times
-in a fold.  When called with a ``tzinfo`` argument, the value of the
-``fold`` will be determined by the ``tzinfo.fromutc()``
-implementation.  If an instance of the built-in ``datetime.timezone``
-is passed as ``tzinfo``, the returned datetime instance will always
-have ``fold=0``.
+``fold=1`` when returning the second of the two ambiguous times in a
+system local time fold.  When called with a ``tzinfo`` argument, the
+value of the ``fold`` will be determined by the ``tzinfo.fromutc()``
+implementation.  If an instance of the ``datetime.timezone`` class
+(*e.g.* ``datetime.timezone.utc``) is passed as ``tzinfo``, the
+returned datetime instance will always have ``fold=0``.
 
 
 Conversion from naive to aware
@@ -240,8 +247,8 @@ other is the similar value but in a timezone the  UTC offset
 is always the same as the offset right after the gap.
 
 The value returned by ``dt.timestamp()`` given a missing
-``dt`` will be the larger of the two "nice to know" values
-if ``dt.fold  == True`` and the smaller otherwise.
+``dt`` will be the greater of the two "nice to know" values
+if ``dt.fold == 0`` and the smaller otherwise.
 
 For example, on a system set to US/Eastern timezone::
 
@@ -265,20 +272,19 @@ Pickles
 .......
 
 Pickle sizes for the ``datetime.datetime`` and ``datetime.time``
-objects will not change.  The ``fold`` flag will be encoded in the
+objects will not change.  The ``fold`` value will be encoded in the
 first bit of the 5th byte of the ``datetime.datetime`` pickle payload
 or the 2nd byte of the datetime.time. In the `current implementation`_
 these bytes are used to store minute value (0-59) and the first bit is
-always 0.  Note that ``fold=0`` will be encoded as 0 in the first
-bit and ``fold=1`` as 1.  (This change only affects pickle
-format.  In the C implementation, the "fold" member will get a full byte
-to store the actual boolean value.)
-
+always 0.  (This change only affects pickle format.  In the C
+implementation, the ``fold`` attribute will get a full byte to store its
+value.)
 
 .. _current implementation: https://hg.python.org/cpython/file/d3b20bff9c5d/Include/datetime.h#l17
 
-Implementations of tzinfo in stdlib
-===================================
+
+Implementations of tzinfo in the Standard Library
+=================================================
 
 No new implementations of ``datetime.tzinfo`` abstract class are
 proposed in this PEP.  The existing (fixed offset) timezones do
@@ -323,7 +329,7 @@ On an ambiguous time introduced at the end of DST, the values returned
 by ``utcoffset()`` and ``dst()`` methods should be as follows
 
 +-----------------+----------------+------------------+
-|                 |   fold=0   |    fold=1   |
+|                 |   fold=0       |    fold=1        |
 +=================+================+==================+
 | utcoffset()     | stdoff + dstoff|    stdoff        |
 +-----------------+----------------+------------------+
@@ -342,7 +348,7 @@ On a missing time introduced at the start of DST, the values returned
 by ``utcoffset()`` and ``dst()`` methods should	be as follows
 
 +-----------------+----------------+------------------+
-|                 |   fold=0   |    fold=1   |
+|                 |   fold=0       |    fold=1        |
 +=================+================+==================+
 |  utcoffset()    |     stdoff     |  stdoff + dstoff |
 +-----------------+----------------+------------------+
@@ -359,7 +365,7 @@ the value of ``fold`` and the ``utcoffset()`` should return values
 according to the following table:
 
 +-----------------+----------------+-----------------------------+
-|                 |   fold=0   |    fold=1              |
+|                 |   fold=0       |    fold=1                   |
 +=================+================+=============================+
 |   ambiguous     |     oldoff     |     newoff = oldoff - delta |
 +-----------------+----------------+-----------------------------+
@@ -381,13 +387,13 @@ need to differentiate between such instances should check the value of
 times.
 
 The result of addition (subtraction) of a timedelta to (from) a
-datetime will always have ``fold`` set to ``True`` even if the
+datetime will always have ``fold`` set to 0 even if the
 original datetime instance had ``fold=1``.
 
 .. [#] Computing a difference between two aware datetime instances
    with different values of ``tzinfo`` involves an implicit timezone
    conversion.  In this case, the result may depend on the value of
-   the ``fold`` flag in either of the instances, but only if the
+   the ``fold`` attribute in either of the instances, but only if the
    instance has ``tzinfo`` that accounts for the value of ``fold``
    in its ``utcoffset()`` method.
 
@@ -431,6 +437,17 @@ A non-technical answer
 
 -------
 
+(same characters, an hour later)
+
+-------
+
+* Bob: Alice - this Py-O-Clock gadget of mine asks me to choose
+  between fold=0 and fold=1 when I set it for tomorrow 01:30 AM.
+  What should I do?
+* Alice: I've never hear of a Py-O-Clock, but I guess fold=0 is
+  the first 01:30 AM and fold=1 is the second. 
+
+
 A technical reason
 ..................
 
@@ -451,35 +468,37 @@ there is rarely a way to know anything about DST *before* a call to
 ``time.mktime`` is made, the only sane choice is usually
 ``tm_isdst=-1``.
 
-Unlike ``tm_isdst``, the proposed ``fold`` flag has no effect on the
-interpretation of the datetime instance unless without that flag two
-(or no) interpretations are possible.
+Unlike ``tm_isdst``, the proposed ``fold`` attribute has no effect on
+the interpretation of the datetime instance unless without that
+attribute two (or no) interpretations are possible.
 
 Since it would be very confusing to have something called ``isdst``
 that does not have the same semantics as ``tm_isdst``, we need a
 different name.  Moreover, the ``datetime.datetime`` class already has
 a method called ``dst()`` and if we called ``fold`` "isdst", we would
-necessarily have situations when "isdst" and ``bool(dst())`` values
-are different.
+necessarily have situations when "isdst" is zero but ``dst()`` is not
+or the other way around.
+
+Why "fold"?
+-----------
+
+Suggested by Guido van Rossum and favored by one (but initially
+disfavored by another) author.  A consensus was reached after the
+allowed values for the attribute were changed from False/True to 0/1.
+The noun "fold" has correct connotations and easy mnemonic rules, but
+at the same time does not invite unbased assumptions.
 
 
-Why "first"?
-------------
+What is "first"?
+----------------
 
-This is a working name chosen initially because the obvious
-alternative ("second") conflicts with the existing attribute.  It has
-since become clear that it is desirable to have a flag with the
-default value ``False`` and such that chronological ordering of
-disambiguated (datetime, flag) pairs would match their lexicographical
-order.
+This was a working name of the attribute chosen initially because the
+obvious alternative ("second") conflicts with the existing attribute.
+It was rejected mostly on the grounds that it would make True a
+default value.
 
-The following alternative names have been proposed:
+The following alternative names have also been considered:
 
-  **fold**
-      Suggested by Guido van Rossum and favored by one (but disfavored by another) author.  Has
-      correct connotations and easy mnemonic rules, but at the same
-      time does not invite unbased assumptions.
-   
   **later**
       A close contender to "fold".  One author dislikes it because
       it is confusable with equally fitting "latter," but in the age
@@ -513,7 +532,7 @@ Are two values enough?
 ----------------------
 
 Several reasons have been raised to allow a ``None`` or -1 value for
-the ``first`` flag: backward compatibility, analogy with ``tm_isdst``
+the ``fold`` attribute: backward compatibility, analogy with ``tm_isdst``
 and strict checking for invalid times.
 
 
