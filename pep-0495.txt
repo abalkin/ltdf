@@ -93,6 +93,11 @@ case. For those instances, the value will be 1. [#]_
   this PEP specifies how various functions should behave when given an
   invalid instance.
 
+.. image:: pep-0495-fold.png
+  :align: center
+  :width: 60%
+
+
 Affected APIs
 -------------
 
@@ -256,6 +261,23 @@ For example, on a system set to US/Eastern timezone::
   1425799800.0
   >>> datetime(2015, 3, 8, 2, 30, fold=1).timestamp()
   1425796200.0
+
+
+Aware datetime instances
+........................
+
+Users of pre-PEP implementations of ``tzinfo`` will not see any
+changes in the behavior of their aware datetime instances.  Two such
+instances that differ only by the value of the ``fold`` attribute will
+not be distinguishable by any means other than an explicit access to
+the ``fold`` value.
+
+On the other hand, if object's ``tzinfo`` is set to a fold-aware
+implementation, then the value of ``fold`` will affect the result of
+several methods but only if the corresponding time is in a fold or in
+a gap: ``utcoffset()``, ``dst()``, ``tzname()``, ``astimezone()``,
+``strftime()`` (if "%Z" or "%z" directive is used in the format
+specification), ``isoformat()``, and ``timetuple()``.
 
 
 Combining and splitting date and time
