@@ -404,27 +404,91 @@ according to the following table:
 where ``delta`` is the size of the fold or the gap.
 
 
-Temporal Arithmetic
-===================
+Temporal Arithmetic and Comparisons
+===================================
 
-The value of "fold" will be ignored in all operations except those
-that involve conversion between timezones. [#]_ As a consequence,
-``datetime.datetime`` or ``datetime.time`` instances that differ only
-by the value of ``fold`` will compare as equal.  Applications that
-need to differentiate between such instances should check the value of
-``fold`` or convert them to a timezone that does not have ambiguous
-times.
+Naive Instances
+---------------
+
+The value of "fold" will be ignored in all operations with naive
+instances.  As a consequence, ``datetime.datetime`` or
+``datetime.time`` instances that differ only by the value of ``fold``
+will compare as equal.  Applications that need to differentiate
+between such instances should check the value of ``fold`` explicitly.
 
 The result of addition (subtraction) of a timedelta to (from) a
 datetime will always have ``fold`` set to 0 even if the
 original datetime instance had ``fold=1``.
 
-.. [#] Computing a difference between two aware datetime instances
-   with different values of ``tzinfo`` involves an implicit timezone
-   conversion.  In this case, the result may depend on the value of
-   the ``fold`` attribute in either of the instances, but only if the
-   instance has ``tzinfo`` that accounts for the value of ``fold``
-   in its ``utcoffset()`` method.
+Aware Instances
+---------------
+
+Since one of the goals in this PEP is to preserve backward
+compatibility, it is helpful to start by explaining how comparison and
+arithmetic operations are curretly defined.
+
+Let's start with naive datetime instances.  It is helpful to think of
+those as different configurations of hands on an ordinary mechanical
+clock.  For example, a Python expression ``time(1, 30)`` corresponds
+to a "long hand at 6, short hand between 1 and 2".  A ``datetime``
+object is a fancy clock with separate hands for years, months, and so
+on through microseconds.  A ``timedelta`` is the knob on the back of
+the clock that you can turn to change the configuration of the clock
+hands.  The fancy ``datetime`` clock has several knobs that allow to
+change the displayed time by weeks, days, hours and so on through
+microseconds, but if we don't care about convinences, we can make any
+change using a single microsecond knob.
+
+The operations defined on the datetimes and timedeltas have nothing to
+do with the physical time only with the construction of this imaginary
+clock.  For example, addition of two timedeltas tells you how to get
+the effect of turning a knob twice by two different angles with a
+single turn by another angle.  Timedelta negation is a way to undo the
+change caused by a given timedelta and timedelta subtraction is the
+same as addition of a negative delta.  (Clockwise turns are considered
+positive and counterclockwise turns negative.)
+
+The subtraction operation on two datetime instances tells you how to
+turn the knob to get from the suntrahend configuration to the minuend.
+
+The addition/subtraction of a timedelta to/from a datetime is simply
+the result of turning the knob clockwise or counterclockwise starting
+from on configuration to arrive at another.
+
+An aware datetime is simply a clock with the name of a time zone
+written on it.
+
+.. image:: pep-0495-budapest_world_clock_wall_clock.jpg
+  :align: center
+
+The construction of the clock is still the same: same hands, same
+knobs, same gears connecting them.  The only difference is the time
+zone label which does not affect the results of various operations in
+any way.
+
+Now, suppose you have two clocks displaying time in two different time
+zones.
+
+.. image:: pep-0495-two-clocks.png
+
+No matter what you do to the knobs on the left clock, it will not
+magically transform itself into the clock on the right.  Moreover,
+matching the hands configuration on the two clocks does not make much
+sense either because the same hands display may correspond to
+different times in Budapest and Newcastle.  Python defines the
+"difference" between the times shown on such clocks as follows.  Each
+clock comes with a manual (``utcoffset()``) which says how one should
+turn the knob to display a "universal" time.  Once both clocks are
+adjusted according to their manuals, "equal" times correspond to
+congruent configurations.  The difference between the two times is how
+far one should turn the knob on the adjusted right clock to make it
+display a configuration that is congruent to the adjusted left clock.
+
+Note that interzone difference is more complicated and is defined in
+terms of intrazone operations.  Although conceptually, intrazone and
+interzone comparisons and "difference" operations are completely
+different, Python uses the same operators ``==`` and ``-`` to
+implement them.
 
 
 Backward and Forward Compatibility
