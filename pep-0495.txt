@@ -411,7 +411,7 @@ Naive Instances
 ---------------
 
 The value of "fold" will be ignored in all operations with naive
-instances.  As a consequence, ``datetime.datetime`` or
+instances.  As a consequence, naive ``datetime.datetime`` or
 ``datetime.time`` instances that differ only by the value of ``fold``
 will compare as equal.  Applications that need to differentiate
 between such instances should check the value of ``fold`` explicitly.
@@ -425,7 +425,7 @@ Aware Instances
 
 Since one of the goals in this PEP is to preserve backward
 compatibility, it is helpful to start by explaining how comparison and
-arithmetic operations are curretly defined.
+arithmetic operations are currently defined.
 
 Let's start with naive datetime instances.  It is helpful to think of
 those as different configurations of hands on an ordinary mechanical
@@ -436,11 +436,11 @@ on through microseconds.  A ``timedelta`` is the knob on the back of
 the clock that you can turn to change the configuration of the clock
 hands.  The fancy ``datetime`` clock has several knobs that allow to
 change the displayed time by weeks, days, hours and so on through
-microseconds, but if we don't care about convinences, we can make any
+microseconds, but if we don't care about conveniences, we can make any
 change using a single microsecond knob.
 
 The operations defined on the datetimes and timedeltas have nothing to
-do with the physical time only with the construction of this imaginary
+do with the physical time, only with the construction of this imaginary
 clock.  For example, addition of two timedeltas tells you how to get
 the effect of turning a knob twice by two different angles with a
 single turn by another angle.  Timedelta negation is a way to undo the
@@ -449,11 +449,11 @@ same as addition of a negative delta.  (Clockwise turns are considered
 positive and counterclockwise turns negative.)
 
 The subtraction operation on two datetime instances tells you how to
-turn the knob to get from the suntrahend configuration to the minuend.
+turn the knob to get from the subtrahend configuration to the minuend.
 
 The addition/subtraction of a timedelta to/from a datetime is simply
 the result of turning the knob clockwise or counterclockwise starting
-from on configuration to arrive at another.
+from one configuration to arrive at another.
 
 An aware datetime is simply a clock with the name of a time zone
 written on it.
@@ -484,17 +484,17 @@ congruent configurations.  The difference between the two times is how
 far one should turn the knob on the adjusted right clock to make it
 display a configuration that is congruent to the adjusted left clock.
 
-Note that interzone difference is more complicated and is defined in
-terms of intrazone operations.  Although conceptually, intrazone and
-interzone comparisons and "difference" operations are completely
-different, Python uses the same operators ``==`` and ``-`` to
-implement them.
+Note that this definition of interzone difference is much more
+complicated than (and is defined in terms of) intrazone operations.
+Although conceptually, intrazone and interzone comparisons and
+"difference" operations are completely different, Python uses the
+same operators ``==`` and ``-`` to spell them.
 
 
 Backward and Forward Compatibility
 ==================================
 
-This proposal will have little effect on the programs that do not read
+This proposal will have little effect on programs that do not read
 the ``fold`` flag explicitly or use tzinfo implementations that do.
 The only visible change for such programs will be that conversions to
 and from POSIX timestamps will now round-trip correctly (up to
@@ -579,7 +579,7 @@ Suggested by Guido van Rossum and favored by one (but initially
 disfavored by another) author.  A consensus was reached after the
 allowed values for the attribute were changed from False/True to 0/1.
 The noun "fold" has correct connotations and easy mnemonic rules, but
-at the same time does not invite unbased assumptions.
+at the same time does not invite baseless assumptions.
 
 
 What is "first"?
